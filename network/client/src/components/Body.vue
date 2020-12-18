@@ -63,7 +63,9 @@
                         <!-- ********************* -->
                         <!-- POST SUBMISSION SECTION --> 
                         <v-card class="pa-2" outlined>
-                            <v-text-field class="pa-2 mb-n8" v-model="post.content" placeholder="What's on your mind?" rounded></v-text-field>
+                            <v-form ref="form">
+                            <v-text-field class="pa-2 mb-n8" v-model="post.content" :rules="inputRules" placeholder="What's on your mind?" rounded></v-text-field>
+                            </v-form>
                             <v-card-actions>
                             <v-icon class="ml-4" color="#DC6ACF" large>mdi-image</v-icon>
                             <v-icon class="ml-4 mr-4" color="#C75000" large>mdi-gif</v-icon>
@@ -148,7 +150,7 @@
                                                 <span><v-icon class="ml-2 mr-2" color="#DD0000">mdi-heart-outline</v-icon>{{post.hearts}}</span>
                                             </span>
                                         </v-card-actions>
-                                        
+                                    
                                     </v-card>
                                 </div>
                             </v-card>   
@@ -209,7 +211,6 @@
 
 <script>
 
-  //import EventService from '@/services/eventservice.js'
   import axios from 'axios'
 
   export default {
@@ -239,6 +240,9 @@
                     username: "BillMatt425",
                 },
               ],
+        inputRules: [
+        v => (v && v.length > 0),
+      ],
         };
     },
 
@@ -262,6 +266,7 @@
                 await axios.post('http://localhost:3000/', this.post)
                 let response = await axios.get('http://localhost:3000/');
                 this.posts = response.data;
+                this.post.content = "";
             } catch (error) {
                 console.error(error);
             }
